@@ -7,6 +7,8 @@
 #include "Tests/AutomationTestSettings.h"
 #include "TP2K_PlayerController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerController_NewThrustDetected);
+
 USTRUCT(BlueprintType)
 struct FCurrentInputValues
 {
@@ -48,6 +50,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Player Controller")
 	FVector GetLeftStick_Scaled() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Player Controller")
+	float GetThrustValue() const;
 	
 	// ----------------------------------------------------------------------------------------------------------------
 protected:
@@ -69,6 +74,9 @@ protected:
 
 	// ----------------------------------------------------------------------------------------------------------------
 
+	UPROPERTY(BlueprintAssignable, Category = "Player Controller", meta = (DisplayName = "On Player Thrusted"))
+	FPlayerController_NewThrustDetected OnPlayerThrust;
+	
 	UPROPERTY(BlueprintReadWrite)
 	FCurrentInputValues m_CurrentInput;
 };

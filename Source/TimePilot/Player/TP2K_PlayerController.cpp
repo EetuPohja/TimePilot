@@ -2,6 +2,7 @@
 
 
 #include "Player/TP2K_PlayerController.h"
+#include "TP2K_Types.h"
 
 ATP2K_PlayerController::ATP2K_PlayerController()
 {
@@ -15,6 +16,18 @@ void ATP2K_PlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveRight", this, &ATP2K_PlayerController::MoveRight);
 	InputComponent->BindAxis("MoveForward", this, &ATP2K_PlayerController::MoveForward);
 	InputComponent->BindAxis("LeftTrigger", this, &ATP2K_PlayerController::Thrust);
+
+	InputComponent->BindAction("ActionButtonA", IE_Pressed, this, &ATP2K_PlayerController::PressActionButtonA).bExecuteWhenPaused = true;
+	InputComponent->BindAction("ActionButtonA", IE_Released, this, &ATP2K_PlayerController::ReleaseActionButtonA).bExecuteWhenPaused = true;
+	
+	InputComponent->BindAction("ActionButtonB", IE_Pressed, this, &ATP2K_PlayerController::PressActionButtonB).bExecuteWhenPaused = true;
+	InputComponent->BindAction("ActionButtonB", IE_Released, this, &ATP2K_PlayerController::ReleaseActionButtonB).bExecuteWhenPaused = true;
+	
+	InputComponent->BindAction("ActionButtonX", IE_Pressed, this, &ATP2K_PlayerController::PressActionButtonX).bExecuteWhenPaused;
+	InputComponent->BindAction("ActionButtonX", IE_Released, this, &ATP2K_PlayerController::ReleaseActionButtonX).bExecuteWhenPaused;
+	
+	InputComponent->BindAction("ActionButtonY", IE_Pressed, this, &ATP2K_PlayerController::PressActionButtonY).bExecuteWhenPaused;
+	InputComponent->BindAction("ActionButtonY", IE_Released, this, &ATP2K_PlayerController::ReleaseActionButtonY).bExecuteWhenPaused;
 }
 
 void ATP2K_PlayerController::Tick(float DeltaSeconds)
@@ -25,6 +38,7 @@ void ATP2K_PlayerController::Tick(float DeltaSeconds)
 void ATP2K_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	m_CurrentInput.fLastThrustSeconds = GetWorld()->GetTimeSeconds();
 }
 
 FVector ATP2K_PlayerController::GetLeftStick_Raw() const
@@ -36,6 +50,12 @@ FVector ATP2K_PlayerController::GetLeftStick_Scaled() const
 {
 	return  m_CurrentInput.vLeftStick * m_CurrentInput.fThrust;
 }
+
+float ATP2K_PlayerController::GetThrustValue() const
+{
+	return m_CurrentInput.fThrust;
+}
+
 
 void ATP2K_PlayerController::MoveForward(float fValue)
 {
@@ -50,6 +70,13 @@ void ATP2K_PlayerController::MoveRight(float fValue)
 void ATP2K_PlayerController::Thrust(float fValue)
 {
 	m_CurrentInput.fThrust = fValue;
+
+	if(fValue > 0.1f)
+	{
+		const float fTime = GetWorld()->GetTimeSeconds();
+		if(fTime - m_CurrentInput.fLastThrustSeconds > s_fNewThrustDetectedSeconds) OnPlayerThrust.Broadcast();
+		m_CurrentInput.fLastThrustSeconds = fTime;
+	}
 }
 
 void ATP2K_PlayerController::PressActionButtonA()
