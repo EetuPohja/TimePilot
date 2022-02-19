@@ -5,3 +5,11 @@
 #define CLEAR_BIT(Bitmask, BitFlag) (Bitmask ^= static_cast<uint64>(BitFlag))
 
 static  constexpr float s_fNewThrustDetectedSeconds = 0.1f;
+
+UENUM(BlueprintType)
+enum class EDebugLevels : uint8
+{
+	NODEBUG,
+	DEBUGTEXT,
+	DEBUGTEXTANDSHAPES,
+};

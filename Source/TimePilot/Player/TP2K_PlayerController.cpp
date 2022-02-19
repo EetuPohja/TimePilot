@@ -2,6 +2,8 @@
 
 
 #include "Player/TP2K_PlayerController.h"
+
+#include "TP2K_Player.h"
 #include "TP2K_Types.h"
 
 ATP2K_PlayerController::ATP2K_PlayerController()
@@ -81,6 +83,8 @@ void ATP2K_PlayerController::Thrust(float fValue)
 
 void ATP2K_PlayerController::PressActionButtonA()
 {
+	auto* pPlayer = Cast<ATP2K_Player>(GetPawn());
+	if (nullptr != pPlayer) pPlayer->StartFireGun();
 }
 
 void ATP2K_PlayerController::PressActionButtonB()
@@ -101,6 +105,8 @@ void ATP2K_PlayerController::PressActionButtonTL()
 
 void ATP2K_PlayerController::ReleaseActionButtonA()
 {
+	auto* pPlayer = Cast<ATP2K_Player>(GetPawn());
+	if (nullptr != pPlayer) pPlayer->StopFireGun();
 }
 
 void ATP2K_PlayerController::ReleaseActionButtonB()

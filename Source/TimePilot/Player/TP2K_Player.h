@@ -26,4 +26,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// -------------------------------------------------------------------------------------------
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartFireGun();
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StopFireGun();
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartFireMissile();
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StopFireMissile();
+
+	// --------------------------------------------------------------------------------------------
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Properties | Weapons")
+	TArray<TSubclassOf<class UWeaponBase>> m_aGuns;
 };
