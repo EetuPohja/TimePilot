@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DamageTypes/DamageTypeBase.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "ProjectileBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -19,6 +21,9 @@ struct FprojectileProperties
 	
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//TSubclassOf<class MySpecialThingIMade>		//Allows drag&drop of this or derived classes in editor.
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UDamageTypeBase> DamageType;
 };
 
 
